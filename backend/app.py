@@ -20,7 +20,16 @@ def index():
 
 @app.route("/prediction")
 def prediction():
-    
+    b=firebase.database()
+    image=db.child("Image").get()
+    #a=image.val()
+    data=''
+    for image in image.each():
+        data=image.val()['idmageData']
+
+    with open("imageToSave.png", "wb") as fh:
+        fh.write(base64.urlsafe_b64decode(data))
+    db.child("Image").remove() 
     detections = detector.detectObjectsFromImage(input_image=os.path.join(execution_path , "image.jpg"), output_image_path=os.path.join(execution_path , "imagenew.jpg"))
     for Object in detections:
      a= Object["name"]
