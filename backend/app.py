@@ -1,18 +1,28 @@
 from flask import Flask, render_template,request
 from flask.wrappers import Request
 from imageai.Detection import ObjectDetection
-# from gtts import gTTS
 import os
-# import vlc
-# from translate import Translator
+import pyrebase
+import base64
+
+firebaseConfig= {
+  "apiKey": "AIzaSyAZTu8rdlqbSh5Q8ENfcufwziSfYLtnYYU",
+  "authDomain": "shopping-assitance.firebaseapp.com",
+  "databaseURL": "https://shopping-assitance-default-rtdb.firebaseio.com",
+  "projectId": "shopping-assitance",
+  "storageBucket": "shopping-assitance.appspot.com",
+  "messagingSenderId": "104214180012",
+  "appId": "1:104214180012:web:139e8bc3eb046d513aaf09"
+};
 
 execution_path = os.getcwd()
-language = 'en'
 detector = ObjectDetection()
 detector.setModelTypeAsRetinaNet()
 detector.setModelPath( os.path.join(execution_path , "resnet50_coco_best_v2.1.0.h5"))
 detector.loadModel()
 app= Flask(__name__)
+
+firebase=pyrebase.initialize_app(firebaseConfig)
 
 @app.route('/')
 def index():
@@ -20,29 +30,29 @@ def index():
 
 @app.route("/prediction")
 def prediction():
-    b=firebase.database()
+    db=firebase.database()
     image=db.child("Image").get()
     #a=image.val()
     data=''
     for image in image.each():
-        data=image.val()['idmageData']
+        data=image.val()['imageData']
 
-    with open("imageToSave.png", "wb") as fh:
+    with open("image.jpg", "wb") as fh:
         fh.write(base64.urlsafe_b64decode(data))
-    db.child("Image").remove() 
+    
     detections = detector.detectObjectsFromImage(input_image=os.path.join(execution_path , "image.jpg"), output_image_path=os.path.join(execution_path , "imagenew.jpg"))
-    for Object in detections:
-     a= Object["name"]
-    #  myobj = gTTS(text=a, lang=language, slow=False)
-    #  myobj.save("welcome.mp3")
-    #  p= vlc.MediaPlayer("C:\\Users\\ekans\\Desktop\\MAJOR\\welcome.mp3")
-    #  p.play()
-    #  translator= Translator(to_lang="German")
-    #  translation = translator.translate(a)
-    #  amazon="https://www.amazon.in/s?k="+a 
-    #  google="https://www.google.com/search?q="+a
-    #  flipkart="https://www.flipkart.com/search?q="+a
-     return {"a":a}
+    db.child("Image").remove() 
+
+    object_found="No Object Detected!"
+    object_probability=0
+    for eachObject in detections:
+        if(object_probability < eachObject["percentage_probability"]):
+            object_found=eachObject["name"]
+            object_probability=eachObject["percentage_probability"]
+
+
+
+    return {"object":object_found}
 
 if __name__ == "__main__":
     app.run(debug=True)
