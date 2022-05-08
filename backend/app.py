@@ -8,7 +8,7 @@ import base64
 firebaseConfig= {
   "apiKey": "AIzaSyAZTu8rdlqbSh5Q8ENfcufwziSfYLtnYYU",
   "authDomain": "shopping-assitance.firebaseapp.com",
-  "databaseURL": "https://shopping-assitance-default-rtdb.firebaseio.com",
+  "databaseURL": "https://shopping-assistance-da2b8-default-rtdb.firebaseio.com",
   "projectId": "shopping-assitance",
   "storageBucket": "shopping-assitance.appspot.com",
   "messagingSenderId": "104214180012",
