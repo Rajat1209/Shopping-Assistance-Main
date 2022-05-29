@@ -5,20 +5,21 @@ import os
 import pyrebase
 import base64
 
-firebaseConfig= {
-  "apiKey": "AIzaSyAZTu8rdlqbSh5Q8ENfcufwziSfYLtnYYU",
-  "authDomain": "shopping-assitance.firebaseapp.com",
-  "databaseURL": "https://shopping-assistance-final-viva-default-rtdb.firebaseio.com",
-  "projectId": "shopping-assitance",
-  "storageBucket": "shopping-assitance.appspot.com",
-  "messagingSenderId": "104214180012",
-  "appId": "1:104214180012:web:139e8bc3eb046d513aaf09"
+firebaseConfig = {
+  "apiKey": "AIzaSyDydCsaGk6wIYSsQaOBdxAkbVsyQ_8MgXc",
+  "authDomain": "shopping-assistance-c964c.firebaseapp.com",
+  "databaseURL": "https://shopping-assistance-c964c-default-rtdb.firebaseio.com",
+  "projectId": "shopping-assistance-c964c",
+  "storageBucket": "shopping-assistance-c964c.appspot.com",
+  "messagingSenderId": "61443623416",
+  "appId": "1:61443623416:web:74e5a76a864dd8afccee0d",
+  "measurementId": "G-G1L8VJMSGS"
 };
 
 execution_path = os.getcwd()
 detector = ObjectDetection()
 detector.setModelTypeAsRetinaNet()
-detector.setModelPath( os.path.join(execution_path , "resnet50_coco_best_v2.1.0.h5"))
+detector.setModelPath( os.path.join("D:\\NIKHIL\\Projects\\Shopping-Assistance-Main\\backend" , "resnet50_coco_best_v2.1.0.h5"))
 detector.loadModel()
 app= Flask(__name__)
 
